@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
-
+const cookieParser = require("cookie-parser");
+const authRoute = require("./Routes/AuthRoute");
 require("dotenv").config();
 
 const { MONGO_URL, PORT } = process.env;
@@ -20,16 +21,22 @@ app.listen(PORT,(req,res)=>{
 
 app.use(
     cors({
-      origin: ["http://localhost:4000"],
+      origin: ["http://localhost:3000"],
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
+      
     })
   );
   
 
+  app.use(cookieParser());
+  
   app.use(express.json()); 
 //   express.json(): The express.json() will add a body property 
 // to the request or req object. 
 // This includes the request body's parsed JSON data. 
 // req.body in your route handler function 
 // will allow you to access this data.
+
+
+app.use("/", authRoute);
